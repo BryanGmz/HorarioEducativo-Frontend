@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head id="head">
+    <script src="content/scripts/load-content.js"></script>
+</head>
+<body id="body">
+    <main id="container"></main>
+    <script>
+      include("head", "views/config/head.html")
+        .then(() => {
+            return include("body", "views/config/navbar.html");
+        })
+        .then(() => {
+            return include("container", "views/schedule/index.html");
+        })
+        .then(() => {
+            return include("inf_schedule", "views/schedule/inf_schedule.html");
+        })
+        .catch(error => {
+            console.error('Error en una de las inclusiones:', error);
+        });
+    </script>
+    </body>
+</html>
