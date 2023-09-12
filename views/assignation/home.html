@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head id="head">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="/HorarioEducativo-Frontend/content/scripts/load-content.js"></script>
+    <script src="/HorarioEducativo-Frontend/content/scripts/requests-lists.js"></script>
+</head>
+<body id="body">
+    <main id="container">
+        <div style="display: grid; place-items: center;">
+            <!-- Notificaciones -->
+            <div id="notification"></div>
+
+            <!-- Información de datos -->
+            <div id="informative-data"></div>
+
+            <hr class="navbar-divider">
+
+            <!-- Botón de agregar profesor  -->
+            <a class="button is-primary is-inverted" type="button" href="/HorarioEducativo-Frontend/views/assignation/create.html">Agregar</a>
+            
+            <!-- Lista -->
+            <section id="section-home" class="section" style="width: 100%;"></section>
+        </div>
+    </main>
+    <script>
+        include("head", "/HorarioEducativo-Frontend/views/config/head.html")
+            .then(() => {
+                return include("body", "/HorarioEducativo-Frontend/views/config/navbar.html");
+            })
+            .then(() => {
+                return include("notification", "/HorarioEducativo-Frontend/views/shared/home-notifications.html");
+            })
+            .then(() => {
+                return include("informative-data", "/HorarioEducativo-Frontend/views/shared/home-information.html");
+            })
+            .then(() => {
+                return include("section-home", "/HorarioEducativo-Frontend/views/shared/home-list.html");
+            })
+            .then(() => {
+                includeNotification("Asignación");
+                loadHeadTable([
+                    "Curso", "Carrera", "Año", "Semestre", "Asignados", ""
+                ]);
+                fillTable(ASSIGNMENT_MODULE);
+            })
+            .catch(error => {
+                console.error('Error en una de las inclusiones:', error);
+            });
+
+        function sendToGenerateSchedule() {
+            window.location.href = "/HorarioEducativo-Frontend/views/schedule/schedule.html"
+        }
+    </script>
+    </body>
+</html>

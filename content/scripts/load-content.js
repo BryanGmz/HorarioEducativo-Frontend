@@ -18,3 +18,35 @@ function include(elementId, path){
         }
     });
 }
+
+function includeNotification(module) {
+    addText("text-error", module);
+    addText("text-success", module);
+}
+
+function includeInformativeData(module, quantity) {
+    addText("title-home", module);
+    addText("quantity-home", quantity);
+}
+
+function loadHeadTable(list) {
+    // Agregando encabezados 
+    var encabezadoRow = document.getElementById('t-head');
+
+    encabezadoRow.innerHTML = "";
+    list.forEach((item) => { 
+        encabezadoRow.innerHTML += 
+        "<th>" 
+            + item 
+            + "</th>";
+        ;
+    });
+}
+
+function addText(idElement, text) {
+    document.getElementById(idElement).textContent = text;
+}
+
+function addReference(idElement, href) {
+    document.getElementById(idElement).href = href
+}

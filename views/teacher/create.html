@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head id="head">
+    <script src="/HorarioEducativo-Frontend/content/scripts/load-content.js"></script>
+</head>
+<body id="body">
+    <main id="container">
+        <div style="display: grid; place-items: center;">
+            <div class="column" style="width: 50% !important;">
+                <div class="panel">
+                    <!-- Titulo -->
+                    <center>
+                        <p class="panel-heading">
+                            Profesor
+                        </p>
+                    </center>
+                </div>
+            </div>
+             <!-- Formulario -->
+            <form class="box" style="width: 50% !important;">
+
+                <!-- DPI -->
+                <div class="columns">
+                    <div class="column">
+                        <label class="label">DPI*:</label>
+                        <div class="control">
+                          <input id="dpi" class="input" type="number">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="columns">
+                    <!-- Nombre -->    
+                    <div class="column">
+                        <label class="label">Nombre*:</label>
+                        <div class="control">
+                            <input id="nombre" class="input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="columns">
+                    <!-- Hora de inicio de labores -->
+                    <div class="column">
+                        <label class="label">Hora Inicio de Labores*:</label>
+                        <div class="control">
+                          <input id="horaInicio" class="input" type="time">
+                        </div>
+                    </div>
+                    <div class="column">
+                        <label class="label">Hora Fin de Labores*:</label>
+                        <div class="control">
+                          <input id="horaFin" class="input" type="time">
+                        </div>
+                    </div>
+                </div>
+              
+                <!-- Botones -->
+                <div class="field is-grouped is-grouped-centered">
+                    <p class="control">
+                      <a class="button is-primary" onclick="sendToGenerateSchedule();">
+                        Guardar
+                      </a>
+                    </p>
+                    <p class="control">
+                      <a class="button is-light" href="/HorarioEducativo-Frontend/views/teacher/home.html">
+                        Cancelar
+                      </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script>
+        include("head", "/HorarioEducativo-Frontend/views/config/head.html")
+            .then(() => {
+                return include("body", "/HorarioEducativo-Frontend/views/config/navbar.html");
+            })
+            .catch(error => {
+                console.error('Error en una de las inclusiones:', error);
+            });
+
+        function sendToGenerateSchedule() {
+            
+            window.location.href = "/HorarioEducativo-Frontend/views/schedule/schedule.html"
+        }
+    </script>
+    </body>
+</html>

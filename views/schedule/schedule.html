@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head id="head">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="/HorarioEducativo-Frontend/content/scripts/load-content.js"></script>
+    <script src="/HorarioEducativo-Frontend/content/scripts/requests-lists.js"></script>
+    <style>
+        .card {
+            width: 275px !important;
+        }
+
+        div.td-empty {
+            width: 100px !important;
+        }
+    </style>
+</head>
+<body id="body">
+    <main id="container">
+        <!-- Información de datos -->
+        <br>
+        <div class="level" id="informative-data"></div>
+        <hr class="navbar-divider">
+        <!-- Tab de Horarios -->
+        <div style="display: grid; place-items: center;">
+            <div id="schedule-tab" class="tabs is-centered">
+                <ul>
+                  <li id="by-assignment" class="is-active">
+                    <a>
+                      <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+                      <span onclick="generateSchedule('by-assignment')">Por Asignación</span>
+                    </a>
+                  </li>
+                  <li id="by-qualifications">
+                    <a>
+                      <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
+                      <span onclick="generateSchedule('by-qualifications')">Por Cualificaciones</span>
+                    </a>
+                  </li>
+                  <li id="by-hiring-schedule">
+                    <a>
+                      <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span>
+                      <span onclick="generateSchedule('by-hiring-schedule')">Por Horario de Contratación</span>
+                    </a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Horario -->
+        <section class="section">
+            <div style="display: grid; place-items: center;" class="table-container">
+                <table class="table is-striped is-bordered is-hoverable">
+                    <!-- Encabezado -->
+                    <thead>
+                        <tr id="t-head">
+                        </tr>
+                    </thead>
+                    <tbody id="t-body">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script>
+        include("head", "/HorarioEducativo-Frontend/views/config/head.html")
+            .then(() => {
+                return include("body", "/HorarioEducativo-Frontend/views/config/navbar.html");
+            })
+            .then(() => {
+                return include("informative-data", "/HorarioEducativo-Frontend/views/schedule/inf_schedule.html");
+            })
+            .then(() => {
+                get_informative_data();
+            })
+            .catch(error => {
+                console.error('Error en una de las inclusiones:', error);
+            });
+
+        function activeTab(element) {
+            const classTab = 'is-active'; 
+            document.getElementById("by-assignment").classList.remove(classTab)
+            document.getElementById("by-qualifications").classList.remove(classTab)
+            document.getElementById("by-hiring-schedule").classList.remove(classTab)
+            document.getElementById(element).classList.add(classTab);
+        }
+
+        function generateSchedule(priority) {
+            activeTab(priority)
+            var requestData = {
+                "start_time": localStorage.getItem('horaInicio') + ":00",
+                "end_time": localStorage.getItem('horaFin') + ":00",
+                "time_frame": localStorage.getItem('periodo') + ":00"
+            };
+
+            document.getElementById('t-head').innerHTML = "";
+            document.getElementById('t-body').innerHTML = "";
+            // Realizar una solicitud POST con jQuery
+            $.ajax({
+                url: URI_API + SCHEDULE_MODULE,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json', // Indicar el tipo de contenido como JSON
+                data: JSON.stringify(requestData), // Convertir los datos a formato JSON
+                success: function (data) {
+                    const head_card = "<div class=\"card\"><div class=\"card-content\"><div class=\"content\">";
+                    const foot_card = "</div></div></div>";  
+                    document.getElementById('t-head').innerHTML = "";
+                    document.getElementById('t-body').innerHTML = "";
+                    console.log(data); // Hacer algo con los datos de respuesta
+                    
+                    // Agregando encabezados 
+                    var encabezadoRow = document.getElementById('t-head');
+                    encabezadoRow.innerHTML = "<th><div class=\"td-empty\"></div></th>";
+                    data.classrooms.forEach((classroom) => { 
+                        encabezadoRow.innerHTML += 
+                        "<th>" 
+                            + classroom.classroom.name 
+                            + "<br><span class=\"tag is-link is-light\">Capacidad: " + classroom.classroom.capacity + "</span></th>";
+                        ;
+                    });
+
+                    var schedule_by_periods = null
+                    if (priority == "by-assignment") {
+                        schedule_by_periods = data.schedule_by_priorities[0].schedule
+                    } else if (priority == "by-qualifications") {
+                        schedule_by_periods = data.schedule_by_priorities[2].schedule
+                    } else {
+                        schedule_by_periods = data.schedule_by_priorities[1].schedule
+                    }
+
+                    var cuerpo = document.getElementById('t-body');
+                    data.periods.forEach((period) => {
+                        var fila = document.createElement('tr');
+                        var th = document.createElement('th');
+                        th.textContent = period.start_time.substring(0, 5) + " a " + period.end_time.substring(0, 5);
+                        fila.appendChild(th);
+                        schedule_by_periods[period.index].forEach(function (valor) {
+
+                            var data_course = "<td>" + head_card + foot_card + "</td>";
+                            if (valor.schedule_assignment != null) {
+                                data_course = 
+                                "<td>" 
+                                    + head_card
+                                    + valor.schedule_assignment.course.name 
+                                    + "<br><span class=\"tag is-warning is-light\">Sección: " + valor.schedule_assignment.section + "</span>" 
+                                    + "<br><span class=\"tag is-info is-light\">Asignados: " + valor.schedule_assignment.assigned + "</span>" 
+                                    + "<br><span class=\"tag is-primary is-light\">Profesor: " + valor.schedule_assignment.teacher.name + "</span>" 
+                                    + "<br><span class=\"tag is-link is-light\">Semestre: " + valor.schedule_assignment.semester + "</span>" 
+                                    + "<br><span class=\"tag is-danger is-light\">Carrera: " + valor.schedule_assignment.course.carrer.name + "</span>" 
+                                    + foot_card
+                                    + "</td>";
+                            }
+                            fila.innerHTML += data_course;
+                        });
+                        cuerpo.appendChild(fila);
+                    });
+                },
+                error: function (error) {
+                    // Función que se ejecutará si hay un error en la solicitud
+                    console.error('Error:', error);
+                }
+            });    
+        }
+    </script>
+    </body>
+</html>
