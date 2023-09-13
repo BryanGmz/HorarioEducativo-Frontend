@@ -57,8 +57,6 @@ function fillTable(module) {
                 fillTableTeachers(data);
                 includeInformativeData("Profesores", data.teachers.length);
             }
-            
-            
         },
         error: function (error) {
             // Función que se ejecutará si hay un error en la solicitud
@@ -78,14 +76,14 @@ function fillTableAssignment(data) {
         // Agregar celdas a la fila
         fila.insertCell(0).innerHTML = assignment.course.name;
         fila.insertCell(1).innerHTML = assignment.carrer.name;
-        fila.insertCell(2).innerHTML = assignment.year;
-        fila.insertCell(3).innerHTML = assignment.semester == 1 ? "Primero" : "Segundo";
-        fila.insertCell(4).innerHTML = assignment.assigned;
-        fila.insertCell(5).innerHTML =  generateCell(
+        fila.insertCell(2).innerHTML = assignment.section;
+        fila.insertCell(3).innerHTML = assignment.year;
+        fila.insertCell(4).innerHTML = assignment.semester == 1 ? "Primero" : "Segundo";
+        fila.insertCell(5).innerHTML = assignment.assigned;
+        fila.insertCell(6).innerHTML =  generateCell(
             "<div class=\"card\">" + 
                 "<div class=\"card-footer\">" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Eliminar</a>" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Editar</a>" +
+                    "<a onclick=\"deleteModule(" + assignment.id_assignment + ", " + 1 + ");\"class=\"card-footer-item\">Eliminar</a>" +
                 "</div>" + 
             "</div>");
     });
@@ -105,8 +103,7 @@ function fillTableCarrer(data) {
         fila.insertCell(2).innerHTML =  generateCell(
             "<div class=\"card\">" + 
                 "<div class=\"card-footer\">" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Eliminar</a>" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Editar</a>" +
+                    "<a onclick=\"deleteModule(" + carrer.id_carrer + ", " + 2 + ");\" class=\"card-footer-item\">Eliminar</a>" +
                 "</div>" + 
             "</div>");
     });
@@ -127,8 +124,7 @@ function fillTableClassroom(data) {
         fila.insertCell(3).innerHTML =  generateCell(
             "<div class=\"card\">" + 
                 "<div class=\"card-footer\">" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Eliminar</a>" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Editar</a>" +
+                    "<a onclick=\"deleteModule(" + classroom.id_classroom + ", " + 3 + ")\" class=\"card-footer-item\">Eliminar</a>" + 
                 "</div>" + 
             "</div>");
     });
@@ -150,8 +146,7 @@ function fillTableCourses(data) {
         fila.insertCell(4).innerHTML =  generateCell(
             "<div class=\"card\">" + 
                 "<div class=\"card-footer\">" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Eliminar</a>" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Editar</a>" +
+                    "<a onclick=\"deleteModule(" + course.id + ", " + 4 + ")\" class=\"card-footer-item\">Eliminar</a>" + 
                 "</div>" + 
             "</div>");
     });
@@ -173,8 +168,7 @@ function fillTableTeachers(data) {
         fila.insertCell(4).innerHTML =  generateCell(
             "<div class=\"card\">" + 
                 "<div class=\"card-footer\">" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Eliminar</a>" + 
-                    "<a href=\"#\" class=\"card-footer-item\">Editar</a>" +
+                    "<a onclick=\"deleteModule(" + teacher.dpi_teacher + ", " + 5 + ")\" class=\"card-footer-item\">Eliminar</a>" + 
                 "</div>" + 
             "</div>");
     });

@@ -22,6 +22,8 @@ function include(elementId, path){
 function includeNotification(module) {
     addText("text-error", module);
     addText("text-success", module);
+    addText("delete-text-error", module);
+    addText("delete-text-success", module);
 }
 
 function includeInformativeData(module, quantity) {
@@ -49,4 +51,45 @@ function addText(idElement, text) {
 
 function addReference(idElement, href) {
     document.getElementById(idElement).href = href
+}
+
+function hideNotification() {
+    document.getElementById('error-notification').style.display = 'none';
+    document.getElementById('success-notification').style.display = 'none';
+    document.getElementById('delete-error-notification').style.display = 'none';
+    document.getElementById('delete-success-notification').style.display = 'none';
+}
+
+function addNotification(id_local_storage){
+    var data = localStorage.getItem(id_local_storage);
+    if (data != undefined) {
+        var value = (String(data).toLowerCase() === 'true');
+        var errorNotification = document.getElementById('error-notification');
+        var successNotification = document.getElementById('success-notification');
+        if (value) {
+            errorNotification.style.display = 'none';
+            successNotification.style.display = 'inline';
+        } else {
+            errorNotification.style.display = 'inline';
+            successNotification.style.display = 'none';
+        }
+    }
+    localStorage.removeItem(id_local_storage);
+}
+
+function addNotificationDelete(id_local_storage){
+    var data = localStorage.getItem(id_local_storage);
+    if (data != undefined) {
+        var value = (String(data).toLowerCase() === 'true');
+        var deleteErrorNotification = document.getElementById('delete-error-notification');
+        var deleteSuccessNotification = document.getElementById('delete-success-notification');
+        if (value) {
+            deleteErrorNotification.style.display = 'none';
+            deleteSuccessNotification.style.display = 'inline';
+        } else {
+            deleteErrorNotification.style.display = 'inline';
+            deleteSuccessNotification.style.display = 'none';
+        }
+    }
+    localStorage.removeItem(id_local_storage);
 }
