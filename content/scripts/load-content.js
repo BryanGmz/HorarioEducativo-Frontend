@@ -93,3 +93,21 @@ function addNotificationDelete(id_local_storage){
     }
     localStorage.removeItem(id_local_storage);
 }
+
+function fillTableUnassigned(unassigneds) {
+    // Obtener la referencia a la tabla
+    var tbody = document.getElementById('t-body-unassigned');
+    tbody.innerHTML = "";
+    // Recorrer los datos y agregar filas a la tabla
+    unassigneds.forEach((unassigned) => {
+        var fila = tbody.insertRow(); // Crear una nueva fila
+
+        // Agregar celdas a la fila
+        fila.insertCell(0).innerHTML = unassigned.course.id;
+        fila.insertCell(1).innerHTML = unassigned.course.name;
+        fila.insertCell(2).innerHTML = unassigned.carrer.name;
+        fila.insertCell(3).innerHTML = unassigned.section;
+        fila.insertCell(4).innerHTML = unassigned.year;
+        fila.insertCell(5).innerHTML = unassigned.warning;
+    });
+}

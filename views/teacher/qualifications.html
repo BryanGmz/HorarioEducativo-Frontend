@@ -17,14 +17,43 @@
 
             <hr class="navbar-divider">
 
-            <!-- Botón de agregar profesor  -->
-            <a class="button is-primary is-inverted" type="button" href="/HorarioEducativo-Frontend/views/assignation/create.html">Agregar</a>
+            <div class="columns">
+                
+                <div class="column">
+                    <label class="label">Curso*:</label>
+                    <div class="field has-addons">
+                        <div class="select is-rounded">
+                            <select id="select-course" required>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <label class="label">Prioritario*:</label>
+                    <div class="field has-addons">
+                        <div class="select is-rounded">
+                            <select id="select-priority" required>
+                                <option selected value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="control">
+                          <a class="button is-primary is-inverted" type="button" onclick="sendToCreate();">
+                            Agregar
+                          </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             
             <!-- Lista -->
             <section id="section-home" class="section" style="width: 100%;"></section>
         </div>
     </main>
     <script>
+        var dpi = null;
+
         include("head", "/HorarioEducativo-Frontend/views/config/head.html")
             .then(() => {
                 return include("body", "/HorarioEducativo-Frontend/views/config/navbar.html");
@@ -39,18 +68,24 @@
                 return include("section-home", "/HorarioEducativo-Frontend/views/shared/home-list.html");
             })
             .then(() => {
-                includeNotification("Asignación");
+                dpi = localStorage.getItem("dpi_teacher");
+                includeNotification("Cualificación");
                 loadHeadTable([
-                    "Curso", "Carrera", "Sección", "Año", "Semestre", "Asignados", ""
+                    "Código", "Curso", ""
                 ]);
-                fillTable(ASSIGNMENT_MODULE);
+                fillTableQualifications(dpi);
                 hideNotification();
                 addNotification("create-success");
                 addNotificationDelete("delete-success");
+                getCourses();
             })
             .catch(error => {
                 console.error('Error en una de las inclusiones:', error);
             });
+
+            function sendToCreate(){
+                createQualification(dpi);
+            }
     </script>
     </body>
 </html>

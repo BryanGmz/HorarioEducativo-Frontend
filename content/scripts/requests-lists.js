@@ -4,7 +4,8 @@ const CARRER_MODULE = "carrer/";
 const COURSE_MODULE = "course/";
 const CLASSROOM_MODULE = "classroom/";
 const TEACHER_MODULE = "teacher/";
-const SCHEDULE_MODULE = "schedule/"
+const SCHEDULE_MODULE = "schedule/";
+const QUALIFICATION_MODULE = "qualification/";
 
 function generateCell(value) {
     return "<td>" + value + "</td>";
@@ -23,6 +24,41 @@ function get_informative_data() {
             document.getElementById('informative-classroom-data').innerHTML = data.classrooms;
             document.getElementById('informative-teacher-data').innerHTML = data.teachers;
             
+        },
+        error: function (error) {
+            // Función que se ejecutará si hay un error en la solicitud
+            console.error('Error:', error);
+        }
+    });    
+}
+
+function fillTableQualifications(dpi) {
+    document.getElementById('t-body').innerHTML = "";
+    // Realizar una solicitud POST con jQuery
+    $.ajax({
+        url: URI_API + QUALIFICATION_MODULE + dpi + "/",
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json', // Indicar el tipo de contenido como JSON
+        success: function (data) {
+            // Obtener la referencia a la tabla
+            var tbody = document.getElementById('t-body');
+
+            // Recorrer los datos y agregar filas a la tabla
+            data.qualifications.forEach((qualification) => {
+                var fila = tbody.insertRow(); // Crear una nueva fila
+
+                // Agregar celdas a la fila
+                fila.insertCell(0).innerHTML = qualification.course_id;
+                fila.insertCell(1).innerHTML = qualification.name;
+                fila.insertCell(2).innerHTML =  generateCell(
+                    "<div class=\"card\">" + 
+                        "<div class=\"card-footer\">" + 
+                            "<a onclick=\"deleteModule(" + qualification.id + ", " + 6 + ");\"class=\"card-footer-item\">Eliminar</a>" +
+                        "</div>" + 
+                    "</div>");
+            });
+            includeInformativeData("Cualificaciones - " + dpi, data.qualifications.length);
         },
         error: function (error) {
             // Función que se ejecutará si hay un error en la solicitud
@@ -168,6 +204,7 @@ function fillTableTeachers(data) {
         fila.insertCell(4).innerHTML =  generateCell(
             "<div class=\"card\">" + 
                 "<div class=\"card-footer\">" + 
+                    "<a onclick=\"goToQualification(" + teacher.dpi_teacher + ", " + 5 + ")\" class=\"card-footer-item\">Cualificaciones</a>" + 
                     "<a onclick=\"deleteModule(" + teacher.dpi_teacher + ", " + 5 + ")\" class=\"card-footer-item\">Eliminar</a>" + 
                 "</div>" + 
             "</div>");

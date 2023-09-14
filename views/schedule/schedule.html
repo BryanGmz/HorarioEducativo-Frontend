@@ -47,6 +47,9 @@
         </div>
         <!-- Horario -->
         <section class="section">
+            <center>
+                <p class="title">Horario</p><br>
+            </center>
             <div style="display: grid; place-items: center;" class="table-container">
                 <table class="table is-striped is-bordered is-hoverable">
                     <!-- Encabezado -->
@@ -58,6 +61,7 @@
                     </tbody>
                 </table>
             </div>
+            <div id="div-unassigned"></div>
         </section>
     </main>
     <script>
@@ -67,6 +71,9 @@
             })
             .then(() => {
                 return include("informative-data", "/HorarioEducativo-Frontend/views/schedule/inf_schedule.html");
+            })
+            .then(() => {
+                return include("div-unassigned", "/HorarioEducativo-Frontend/views/schedule/list_unassigned.html");
             })
             .then(() => {
                 get_informative_data();
@@ -118,13 +125,17 @@
                         ;
                     });
 
-                    var schedule_by_periods = null
+                    var schedule_by_periods = null;
+                    var unassigneds = null;
                     if (priority == "by-assignment") {
                         schedule_by_periods = data.schedule_by_priorities[0].schedule
+                        unassigneds = data.schedule_by_priorities[0].unassigned
                     } else if (priority == "by-qualifications") {
                         schedule_by_periods = data.schedule_by_priorities[2].schedule
+                        unassigneds = data.schedule_by_priorities[2].unassigned
                     } else {
                         schedule_by_periods = data.schedule_by_priorities[1].schedule
+                        unassigneds = data.schedule_by_priorities[1].unassigned
                     }
 
                     var cuerpo = document.getElementById('t-body');
@@ -153,6 +164,7 @@
                         });
                         cuerpo.appendChild(fila);
                     });
+                    fillTableUnassigned(unassigneds);
                 },
                 error: function (error) {
                     // Función que se ejecutará si hay un error en la solicitud

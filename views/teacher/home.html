@@ -52,10 +52,11 @@
                 console.error('Error en una de las inclusiones:', error);
             });
 
-        function sendToGenerateSchedule() {
-            
-            window.location.href = "/HorarioEducativo-Frontend/views/schedule/schedule.html"
-        }
+            function goToQualification(dpi){
+                console.log(dpi)
+                localStorage.setItem("dpi_teacher", dpi);
+                window.location.href = "/HorarioEducativo-Frontend/views/teacher/qualifications.html"
+            }
     </script>
     </body>
 </html>
