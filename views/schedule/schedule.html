@@ -165,6 +165,10 @@
                         cuerpo.appendChild(fila);
                     });
                     fillTableUnassigned(unassigneds);
+
+                    localStorage.setItem("assignmentMetric", JSON.stringify(data.schedule_by_priorities[0].metrics));
+                    localStorage.setItem("qualificationMetric", JSON.stringify(data.schedule_by_priorities[2].metrics));
+                    localStorage.setItem("hiringScheduleMetric", JSON.stringify(data.schedule_by_priorities[1].metrics));
                 },
                 error: function (error) {
                     // Función que se ejecutará si hay un error en la solicitud

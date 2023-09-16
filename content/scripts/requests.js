@@ -206,7 +206,7 @@ function deleteModule(id, id_module) {
             module = ASSIGNMENT_MODULE;
             break;
         case 2:
-            module = CARRER_MODULEE;
+            module = CARRER_MODULE;
             break;
         case 3:
             module = CLASSROOM_MODULE;

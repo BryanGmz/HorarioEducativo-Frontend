@@ -94,6 +94,21 @@ function addNotificationDelete(id_local_storage){
     localStorage.removeItem(id_local_storage);
 }
 
+function addMetrics(metricName, nameContent) {
+    var metrics = JSON.parse(localStorage.getItem(metricName));
+    var divContent = document.getElementById(nameContent);
+    var content = "";
+    metrics.forEach((metric) => {
+        content += 
+        "<p class=\"subtitle\">" + metric.percentage + "% de " + metric.name + " Asignados</p>" +
+        "<ul>" + 
+            "<li><strong>Disponibles:</strong> " + metric.real_value + "</li>" +
+            "<li><strong>Sin Asignar:</strong> " + metric.avaible_value + "</li>" +
+        "</ul> ";
+    });
+    divContent.innerHTML = content;
+}
+
 function fillTableUnassigned(unassigneds) {
     // Obtener la referencia a la tabla
     var tbody = document.getElementById('t-body-unassigned');
@@ -106,8 +121,9 @@ function fillTableUnassigned(unassigneds) {
         fila.insertCell(0).innerHTML = unassigned.course.id;
         fila.insertCell(1).innerHTML = unassigned.course.name;
         fila.insertCell(2).innerHTML = unassigned.carrer.name;
-        fila.insertCell(3).innerHTML = unassigned.section;
-        fila.insertCell(4).innerHTML = unassigned.year;
-        fila.insertCell(5).innerHTML = unassigned.warning;
+        fila.insertCell(3).innerHTML = unassigned.assigned;
+        fila.insertCell(4).innerHTML = unassigned.section;
+        fila.insertCell(5).innerHTML = unassigned.year;
+        fila.insertCell(6).innerHTML = unassigned.warning;
     });
 }
