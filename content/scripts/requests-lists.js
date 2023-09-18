@@ -108,13 +108,13 @@ function fillTableAssignment(data) {
     // Recorrer los datos y agregar filas a la tabla
     data.assigments.forEach((assignment) => {
         var fila = tbody.insertRow(); // Crear una nueva fila
-
+        console.log(assignment )
         // Agregar celdas a la fila
         fila.insertCell(0).innerHTML = assignment.course.name;
         fila.insertCell(1).innerHTML = assignment.carrer.name;
         fila.insertCell(2).innerHTML = assignment.section;
         fila.insertCell(3).innerHTML = assignment.year;
-        fila.insertCell(4).innerHTML = assignment.semester == 1 ? "Primero" : "Segundo";
+        fila.insertCell(4).innerHTML = assignment.course.semester == 1 ? "Primero" : "Segundo";
         fila.insertCell(5).innerHTML = assignment.assigned;
         fila.insertCell(6).innerHTML =  generateCell(
             "<div class=\"card\">" + 
